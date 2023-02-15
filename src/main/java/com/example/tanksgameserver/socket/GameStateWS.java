@@ -2,6 +2,7 @@ package com.example.tanksgameserver.socket;
 
 import com.example.tanksgameserver.core.GameService;
 import com.example.tanksgameserver.socketmodel.Message;
+import com.example.tanksgameserver.socketmodel.UserGameState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 @Controller
 public class GameStateWS {
@@ -22,19 +24,18 @@ public class GameStateWS {
 
     private final Logger logger = LoggerFactory.getLogger("Websocket connection");
 
-//    @MessageMapping("/hello")
-//    @SendTo("/topic/greetings")
-//    public Greeting greeting(Message message) {
-//        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
-//    }
-
     @MessageMapping("/update")
     public void updateState(Message message) {
+        HashSet<String> keySet = new HashSet<>(Arrays.asList(message.getInput()));
+
+
+        gameService.setKeySet(keySet);
         logger.info(message.getName() + "\t" + Arrays.toString(message.getInput()));
     }
 
-    @Scheduled(fixedRate = 1000)//30
-    public void sendToEverybody() {
-        simpMessagingTemplate.convertAndSend("/topic/gamestate", gameService.getGameState());
+    @Scheduled(fixedRate = 30)//30
+    public void sendToEverybody() throws InterruptedException {
+        UserGameState state = gameService.getGameState().createUserGameState();
+        simpMessagingTemplate.convertAndSend("/topic/gamestate", state);
     }
 }

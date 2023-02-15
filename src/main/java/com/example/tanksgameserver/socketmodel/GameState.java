@@ -1,26 +1,79 @@
 package com.example.tanksgameserver.socketmodel;
 
+import org.apache.commons.math.geometry.Vector3D;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.HashSet;
 
 @Component
 public class GameState {
-    private Coordinates playerPos;
+    private static final Vector3D UP_VEC = new Vector3D(0.0, 1.0, 0.0);
+    private static final double PLAYER_SPEED = 6.0; //  UNITS/SEC
 
-    public GameState(Coordinates playerPos) {
+    private Vector3D playerPos;
+    private Vector3D playerBodyDir;
+    private HashSet<String> keySet;
+
+    private Long prevTime = null;
+
+    public GameState(Vector3D playerPos, Vector3D playerBodyDir) {
         this.playerPos = playerPos;
+        this.playerBodyDir = playerBodyDir;
+        this.keySet = new HashSet<>();
     }
 
     public GameState() {
-        this.playerPos = new Coordinates();
+        this.playerPos = new Vector3D(0.0, 0.0, 0.0);
+        this.playerBodyDir = new Vector3D(UP_VEC.getX(), UP_VEC.getY(), UP_VEC.getZ());
+        this.keySet = new HashSet<>();
     }
 
-    public Coordinates getPlayerPos() {
+    public Vector3D getPlayerPos() {
         return playerPos;
     }
 
-    public void setPlayerPos(Coordinates playerPos) {
+    public void setPlayerPos(Vector3D playerPos) {
         this.playerPos = playerPos;
+    }
+
+    public UserGameState createUserGameState() {
+        return new UserGameState(this);
+    }
+
+    public void setKeySet(HashSet<String> keySet) {
+        this.keySet = keySet;
+    }
+
+    public Vector3D getPlayerBodyDir() {
+        return playerBodyDir;
+    }
+
+    public int getMoveMultiplier() {
+        int multiplier = 0;
+        if (keySet.contains("w")) {
+            multiplier++;
+        }
+        if (keySet.contains("s")) {
+            multiplier--;
+        }
+        return multiplier;
+    }
+
+    public void update() {
+        if (prevTime == null) {
+            this.prevTime = System.currentTimeMillis();
+        }
+
+        long newTime = System.currentTimeMillis();
+        double deltaTime = ((double) (newTime - this.prevTime)) / 1000;
+        this.prevTime = newTime;
+
+        //calculate move distance
+        //only 1 player now
+        double distance = getMoveMultiplier() * deltaTime * PLAYER_SPEED;
+        this.playerPos = this.playerPos.add(UP_VEC.scalarMultiply(distance));//will be replaced by player direction
+        if (playerPos.getY() > 20.0) {
+            playerPos = playerPos.negate();
+        }
     }
 }
