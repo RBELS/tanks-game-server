@@ -1,6 +1,7 @@
 package com.example.tanksgameserver.core;
 
 import com.example.tanksgameserver.socketmodel.GameState;
+import com.example.tanksgameserver.socketmodel.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,8 @@ public class GameService extends Thread {
         return gameState;
     }
 
-    public void setKeySet(HashSet<String> newKeySet) {
-        gameState.setKeySet(newKeySet);
+    public void processPlayerMessage(Message message) {
+        gameState.processPlayerMessage(message);
     }
 
     @Override
