@@ -36,6 +36,7 @@ public class GameStateWS {
     @Scheduled(fixedRate = 30)//30
     public void sendToEverybody() throws InterruptedException {
         UserGameState state = gameService.getGameState().createUserGameState();
+        Thread.sleep(40);
         simpMessagingTemplate.convertAndSend("/topic/gamestate", state);
     }
 }
