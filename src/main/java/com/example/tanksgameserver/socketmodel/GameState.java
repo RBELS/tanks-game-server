@@ -37,7 +37,6 @@ public class GameState {
 
     public GameState() {
         players = new HashMap<>();
-        addPlayer("rebel");
     }
 
     public UserGameState createUserGameState() {

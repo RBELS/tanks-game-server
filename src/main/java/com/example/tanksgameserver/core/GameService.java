@@ -25,6 +25,14 @@ public class GameService extends Thread {
         gameState.processPlayerMessage(message);
     }
 
+    public boolean playerExists(String nickname) {
+        return gameState.getPlayers().containsKey(nickname);
+    }
+
+    public void createPlayer(String nickname) {
+        gameState.addPlayer(nickname);
+    }
+
     @Override
     public void run() {
         super.run();

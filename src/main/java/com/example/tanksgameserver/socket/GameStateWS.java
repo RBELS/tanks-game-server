@@ -26,10 +26,6 @@ public class GameStateWS {
     @MessageMapping("/update")
     public void updateState(Message message) {
         gameService.processPlayerMessage(message);
-//        HashSet<String> keySet = new HashSet<>(Arrays.asList(message.getInput()));
-//
-//
-//        gameService.setKeySet(keySet);
         logger.info(message.getName() + "\t" + Arrays.toString(message.getInput()));
     }
 
