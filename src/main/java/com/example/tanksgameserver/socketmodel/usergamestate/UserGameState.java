@@ -5,7 +5,7 @@ import com.example.tanksgameserver.socketmodel.GameState;
 import java.util.HashMap;
 
 public class UserGameState {
-    private final long serverTime;
+    private final double serverTime;
     private final HashMap<String, UserPlayerState> players;
 
     public UserGameState(GameState gs) {
@@ -13,7 +13,7 @@ public class UserGameState {
         this.players = UserPlayerState.createUserPlayerArr(gs.getPlayers());
     }
 
-    public long getServerTime() {
+    public double getServerTime() {
         return serverTime;
     }
 

@@ -20,6 +20,7 @@ public class GameRestController {
     @PostMapping (value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     protected void createPlayer(@RequestBody Map<String, String> bodyParams) {
         String username = bodyParams.get("username");
+        if (username == null) return;
         logger.info("Login " + username);
 
         if (!gameService.playerExists(username)) {

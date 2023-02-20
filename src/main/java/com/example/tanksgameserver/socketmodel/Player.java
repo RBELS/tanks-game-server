@@ -53,7 +53,7 @@ public class Player {
 
     public void update(double deltaTime) {
         double distance = getMoveMultiplier() * deltaTime * GameState.PLAYER_SPEED;
-        pos = pos.add(this.bodyDir.scalarMultiply(distance));//will be replaced by player direction
+        pos = pos.add(this.bodyDir.scalarMultiply(distance));
 
         //calculate rotate angle
         double rotAngle = getBodyRotateMultiplier() * deltaTime * GameState.PLAYER_ROTATE_SPEED;
