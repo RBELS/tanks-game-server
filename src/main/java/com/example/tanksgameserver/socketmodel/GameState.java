@@ -2,6 +2,8 @@ package com.example.tanksgameserver.socketmodel;
 
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
 import org.apache.commons.math.geometry.Vector3D;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,6 +16,8 @@ public class GameState {
     public static final Vector3D Z_AXIS_VEC = new Vector3D(0.0, 0.0, 1.0);
     public static final double PLAYER_SPEED = 6.0; //  UNITS/SEC
     public static final double PLAYER_ROTATE_SPEED = Math.toRadians(80.0); // DEG/SEC
+
+    private final Logger logger = LoggerFactory.getLogger("Game State");
 
     private Double prevTime = null;
     private final HashMap<String, Player> players;
@@ -46,11 +50,12 @@ public class GameState {
 
     public void update() {
         if (prevTime == null) {
-            this.prevTime = System.currentTimeMillis() / (double) 1;
+            this.prevTime = (double) System.currentTimeMillis();
         }
 
-        double newTime = System.currentTimeMillis() / (double) 1;
-        double deltaTime = ((double) (newTime - this.prevTime)) / 1000;
+        double newTime = System.currentTimeMillis();
+
+        double deltaTime = ((newTime - this.prevTime)) / 1000;
         this.prevTime = newTime;
 
         for (Player player : players.values()) {
