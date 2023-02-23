@@ -3,6 +3,7 @@ package com.example.tanksgameserver.socketmodel.usergamestate;
 import com.example.tanksgameserver.socketmodel.Player;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserPlayerState {
     private final double[] pos;
@@ -33,7 +34,7 @@ public class UserPlayerState {
         return bodyRotateMultiplier;
     }
 
-    public static HashMap<String, UserPlayerState> createUserPlayerArr(HashMap<String, Player> players) {
+    public static Map<String, UserPlayerState> createUserPlayerArr(Map<String, Player> players) {
         HashMap<String, UserPlayerState> userPlayers = new HashMap<>();
         for (String nickname : players.keySet()) {
             userPlayers.put(nickname, new UserPlayerState(players.get(nickname)));

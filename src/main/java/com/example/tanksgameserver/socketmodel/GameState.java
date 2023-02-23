@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class GameState {
@@ -20,7 +22,7 @@ public class GameState {
     private final Logger logger = LoggerFactory.getLogger("Game State");
 
     private Double prevTime = null;
-    private final HashMap<String, Player> players;
+    private final Map<String, Player> players;
 
     public void addPlayer(String nickname) {
         players.put(nickname, new Player(nickname));
@@ -40,7 +42,7 @@ public class GameState {
     }
 
     public GameState() {
-        players = new HashMap<>();
+        players = new ConcurrentHashMap<>();
     }
 
     public UserGameState createUserGameState() {
@@ -67,7 +69,7 @@ public class GameState {
         return prevTime;
     }
 
-    public HashMap<String, Player> getPlayers() {
+    public Map<String, Player> getPlayers() {
         return players;
     }
 }

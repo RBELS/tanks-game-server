@@ -3,10 +3,11 @@ package com.example.tanksgameserver.socketmodel.usergamestate;
 import com.example.tanksgameserver.socketmodel.GameState;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserGameState {
     private final double serverTime;
-    private final HashMap<String, UserPlayerState> players;
+    private final Map<String, UserPlayerState> players;
 
     public UserGameState(GameState gs) {
         this.serverTime = gs.getPrevTime();
@@ -17,7 +18,7 @@ public class UserGameState {
         return serverTime;
     }
 
-    public HashMap<String, UserPlayerState> getPlayers() {
+    public Map<String, UserPlayerState> getPlayers() {
         return players;
     }
 }
