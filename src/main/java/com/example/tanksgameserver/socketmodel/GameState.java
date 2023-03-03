@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,13 +31,17 @@ public class GameState {
         return players.remove(nickname);
     }
 
-    public void processPlayerMessage(Message message) {
-        String username = message.getName();
+    public void processPlayerPosMessage(PosMessage posMessage) {
+        String username = posMessage.getName();
         Player targetPlayer = players.get(username);
         if (targetPlayer == null) return;
 
-        HashSet<String> newKeySet = new HashSet<>(Arrays.asList(message.getInput()));
+        HashSet<String> newKeySet = new HashSet<>(Arrays.asList(posMessage.getInput()));
         targetPlayer.setKeySet(newKeySet);
+    }
+
+    public void processPlayerTopAngleMessage(TopAngleMessage topAngleMessage) {
+
     }
 
     public GameState() {

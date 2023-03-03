@@ -2,6 +2,8 @@ package com.example.tanksgameserver.core;
 
 import com.example.tanksgameserver.socketmodel.GameState;
 import com.example.tanksgameserver.socketmodel.Message;
+import com.example.tanksgameserver.socketmodel.PosMessage;
+import com.example.tanksgameserver.socketmodel.TopAngleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,11 @@ public class GameService extends Thread {
     }
 
     public void processPlayerMessage(Message message) {
-        gameState.processPlayerMessage(message);
+        if (message instanceof PosMessage) {
+            gameState.processPlayerPosMessage((PosMessage) message);
+        } else if (message instanceof TopAngleMessage) {
+            gameState.processPlayerTopAngleMessage((TopAngleMessage) message);
+        }
     }
 
     public boolean playerExists(String nickname) {
