@@ -17,6 +17,7 @@ public class GameState {
     public static final Vector3D Z_AXIS_VEC = new Vector3D(0.0, 0.0, 1.0);
     public static final double PLAYER_SPEED = 6.0; //  UNITS/SEC
     public static final double PLAYER_ROTATE_SPEED = Math.toRadians(80.0); // DEG/SEC
+    public static final double PLAYER_TOP_ROTATE_SPEED = Math.toRadians(160.0); // DEG/SEC
 
     private final Logger logger = LoggerFactory.getLogger("Game State");
 
@@ -41,7 +42,10 @@ public class GameState {
     }
 
     public void processPlayerTopAngleMessage(TopAngleMessage topAngleMessage) {
+        Player targetPlayer = players.get(topAngleMessage.getName());
+        if (targetPlayer == null) return;
 
+        targetPlayer.setDestTopAngle(Math.toRadians(topAngleMessage.getTopAngle()));
     }
 
     public GameState() {

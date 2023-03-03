@@ -2,7 +2,6 @@ package com.example.tanksgameserver.socketmodel.usergamestate;
 
 import com.example.tanksgameserver.socketmodel.GameState;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class UserGameState {

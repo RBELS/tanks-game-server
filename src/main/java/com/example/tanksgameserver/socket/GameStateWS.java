@@ -32,8 +32,7 @@ public class GameStateWS {
 
     @MessageMapping("/updateTopAngle")
     public void updateTopAngle(TopAngleMessage topAngleMessage) {
-        logger.info(topAngleMessage.getName() + "\t" + topAngleMessage.getTopAngle());
-//        gameService.processPlayerMessage(topAngleMessage);
+        gameService.processPlayerMessage(topAngleMessage);
     }
 
     @Scheduled(fixedRate = 30)//30
