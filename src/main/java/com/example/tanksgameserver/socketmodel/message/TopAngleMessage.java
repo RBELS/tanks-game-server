@@ -1,4 +1,4 @@
-package com.example.tanksgameserver.socketmodel;
+package com.example.tanksgameserver.socketmodel.message;
 
 import lombok.Getter;
 import lombok.Setter;

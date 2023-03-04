@@ -1,9 +1,9 @@
 package com.example.tanksgameserver.core;
 
 import com.example.tanksgameserver.socketmodel.GameState;
-import com.example.tanksgameserver.socketmodel.Message;
-import com.example.tanksgameserver.socketmodel.PosMessage;
-import com.example.tanksgameserver.socketmodel.TopAngleMessage;
+import com.example.tanksgameserver.socketmodel.message.Message;
+import com.example.tanksgameserver.socketmodel.message.PosMessage;
+import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +36,10 @@ public class GameService extends Thread {
 
     public void createPlayer(String nickname) {
         gameState.addPlayer(nickname);
+    }
+
+    public void createBullet(String nickname) {
+        gameState.createBullet(nickname);
     }
 
     @Override

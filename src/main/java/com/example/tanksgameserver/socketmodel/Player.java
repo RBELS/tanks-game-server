@@ -100,6 +100,11 @@ public class Player {
         bodyDir = rotation.applyTo(GameState.UP_VEC);
     }
 
+    public Vector3D getGunDir() {
+        Rotation rotation = new Rotation(GameState.Z_AXIS_VEC, actualTopAngle);
+        return rotation.applyTo(GameState.UP_VEC);
+    }
+
     private void rotateTop(double angle) {
         if (angle == 0) return;
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(value = "http://192.168.1.36:3000", allowCredentials = "true")
 public class GameRestController {
     @Autowired
     private GameService gameService;

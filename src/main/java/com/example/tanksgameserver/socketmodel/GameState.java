@@ -1,15 +1,17 @@
 package com.example.tanksgameserver.socketmodel;
 
+import com.example.tanksgameserver.socketmodel.message.PosMessage;
+import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
+import lombok.Getter;
 import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class GameState {
@@ -21,8 +23,12 @@ public class GameState {
 
     private final Logger logger = LoggerFactory.getLogger("Game State");
 
+    @Getter
     private Double prevTime = null;
+    @Getter
     private final Map<String, Player> players;
+    @Getter
+    private final List<Bullet> bullets;
 
     public void addPlayer(String nickname) {
         players.put(nickname, new Player(nickname));
@@ -50,10 +56,16 @@ public class GameState {
 
     public GameState() {
         players = new ConcurrentHashMap<>();
+        bullets = new CopyOnWriteArrayList<>();
     }
 
     public UserGameState createUserGameState() {
         return new UserGameState(this);
+    }
+
+    public void createBullet(String username) {
+        Bullet newBullet = new Bullet(players.get(username));
+        bullets.add(newBullet);
     }
 
 
@@ -67,16 +79,12 @@ public class GameState {
         double deltaTime = ((newTime - this.prevTime)) / 1000;
         this.prevTime = newTime;
 
-        for (Player player : players.values()) {
-            player.update(deltaTime);
+        players.forEach((s, player) -> player.update(deltaTime));
+        for (Bullet bullet : bullets) {
+            boolean result = bullet.update(deltaTime);
+            if (!result) {
+                bullets.remove(bullet);
+            }
         }
-    }
-
-    public Double getPrevTime() {
-        return prevTime;
-    }
-
-    public Map<String, Player> getPlayers() {
-        return players;
     }
 }
