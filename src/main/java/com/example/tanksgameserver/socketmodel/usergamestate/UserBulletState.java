@@ -15,7 +15,7 @@ public class UserBulletState {
 
     public UserBulletState(Bullet bullet) {
         this.pos = new double[] {bullet.getPos().getX(), bullet.getPos().getY()};
-        this.rotateAngle = bullet.getFlyAngle();
+        this.rotateAngle = Math.toDegrees(bullet.getFlyAngle());
     }
 
     public static List<UserBulletState> createState(List<Bullet> bullets) {

@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.apache.commons.math.geometry.Vector3D;
 
 public class Bullet {
-    public static final double BULLET_V = 5.0;
-    public static final double BULLET_MAX_DISTANCE = 10.0;
+    public static final double BULLET_V = 20.0;
+    public static final double BULLET_MAX_DISTANCE = 50.0;
 
     @Getter @Setter
     private Vector3D pos;
