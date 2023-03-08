@@ -25,6 +25,7 @@ public class Bullet {
         this.flyDir = player.getGunDir();
         this.flyAngle = player.getActualTopAngle();
         this.pos = new Vector3D(player.getPos().getX(), player.getPos().getY(), player.getPos().getZ());
+        this.pos = this.pos.add(0.9, this.flyDir);
     }
 
     public boolean update(double deltaTime) {

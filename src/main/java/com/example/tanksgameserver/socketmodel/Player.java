@@ -12,6 +12,7 @@ import java.util.Map;
 
 
 public class Player {
+    public static final double RELOAD_TIME = 1.0;
     public static Logger logger = LoggerFactory.getLogger("Player");
     @Getter
     private final String nickname;
@@ -21,6 +22,10 @@ public class Player {
     private Vector3D bodyDir;
     @Getter
     private double bodyAngle;
+    @Getter @Setter
+    private boolean shooting;
+    @Getter @Setter
+    private double lastShootTime;
 
     @Getter @Setter
     private double destTopAngle;
@@ -39,6 +44,8 @@ public class Player {
         this.keySet = new HashSet<>();
         this.destTopAngle = 0;
         this.actualTopAngle = 0;
+        this.shooting = false;
+        this.lastShootTime = 0.0;
     }
 
     public int getMoveMultiplier() {

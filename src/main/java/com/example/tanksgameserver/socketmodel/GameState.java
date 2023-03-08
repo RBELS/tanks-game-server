@@ -63,11 +63,14 @@ public class GameState {
         return new UserGameState(this);
     }
 
-    public void createBullet(String username) {
+    private void createBullet(String username) {
         Bullet newBullet = new Bullet(players.get(username));
         bullets.add(newBullet);
     }
 
+    public void setShoot(String username, boolean on) {
+        players.get(username).setShooting(on);
+    }
 
     public void update() {
         if (prevTime == null) {
@@ -79,7 +82,14 @@ public class GameState {
         double deltaTime = ((newTime - this.prevTime)) / 1000;
         this.prevTime = newTime;
 
-        players.forEach((s, player) -> player.update(deltaTime));
+        double finalNewTime = newTime / 1000;
+        players.forEach((s, player) -> {
+            player.update(deltaTime);
+            if (player.isShooting() && finalNewTime - player.getLastShootTime() >= Player.RELOAD_TIME ) {
+                player.setLastShootTime(finalNewTime);
+                createBullet(player.getNickname());
+            }
+        });
         for (Bullet bullet : bullets) {
             boolean result = bullet.update(deltaTime);
             if (!result) {

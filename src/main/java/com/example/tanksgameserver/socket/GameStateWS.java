@@ -39,8 +39,9 @@ public class GameStateWS {
     @MessageMapping("/action")
     public void actionMessage(SimpleActionMessage message) {
         logger.info(message.getName() + "\t" + message.getAction());
-        if (message.getAction() == SimpleActionMessage.SHOOT_ACTION) {
-            gameService.createBullet(message.getName());
+        switch (message.getAction()) {
+            case SimpleActionMessage.SHOOT_ACTION_ON -> gameService.setShoot(message.getName(), true);
+            case SimpleActionMessage.SHOOT_ACTION_OFF -> gameService.setShoot(message.getName(), false);
         }
     }
 

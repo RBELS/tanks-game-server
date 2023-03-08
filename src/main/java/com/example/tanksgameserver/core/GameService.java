@@ -38,8 +38,8 @@ public class GameService extends Thread {
         gameState.addPlayer(nickname);
     }
 
-    public void createBullet(String nickname) {
-        gameState.createBullet(nickname);
+    public void setShoot(String nickname, boolean on) {
+        gameState.setShoot(nickname, on);
     }
 
     @Override
