@@ -2,6 +2,7 @@ package com.example.tanksgameserver.socketmodel;
 
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
+import com.example.tanksgameserver.socketmodel.models.TankBodyModel;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
 import lombok.Getter;
 import org.apache.commons.math.geometry.Vector3D;
@@ -22,6 +23,7 @@ public class GameState {
     public static final double PLAYER_TOP_ROTATE_SPEED = Math.toRadians(160.0); // DEG/SEC
 
     private final Logger logger = LoggerFactory.getLogger("Game State");
+    private final TankBodyModel tankBodyModel;
 
     @Getter
     private Double prevTime = null;
@@ -57,6 +59,7 @@ public class GameState {
     public GameState() {
         players = new ConcurrentHashMap<>();
         bullets = new CopyOnWriteArrayList<>();
+        tankBodyModel = new TankBodyModel();
     }
 
     public UserGameState createUserGameState() {
@@ -94,6 +97,19 @@ public class GameState {
             boolean result = bullet.update(deltaTime);
             if (!result) {
                 bullets.remove(bullet);
+                break;
+            }
+
+            for (String nickname : players.keySet()) {
+                Player curPlayer = players.get(nickname);
+                Vector3D pos = curPlayer.getPos();
+                double rotateAngle = curPlayer.getBodyAngle();
+                tankBodyModel.setModel(pos, rotateAngle);
+
+                if (!bullet.getPlayer().equals(players.get(nickname)) && tankBodyModel.isInside(bullet.getPos())) {
+                    logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
+                    bullets.remove(bullet);
+                }
             }
         }
     }
