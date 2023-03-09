@@ -28,12 +28,16 @@ public class Player {
 
     @Getter @Setter
     private double destTopAngle;
-
     @Getter
     private double actualTopAngle;
-
     @Getter @Setter
     private HashSet<String> keySet;
+
+    @Getter @Setter
+    private int score;
+    public void incScore() {
+        this.score += 1;
+    }
 
     public Player(String nickname) {
         this.nickname = nickname;
@@ -45,6 +49,7 @@ public class Player {
         this.actualTopAngle = 0;
         this.shooting = false;
         this.lastShootTime = 0.0;
+        this.score = 0;
     }
 
     public int getMoveMultiplier() {

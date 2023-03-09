@@ -4,6 +4,7 @@ import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.models.TankBodyModel;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
+import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import lombok.Getter;
 import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
@@ -31,9 +32,12 @@ public class GameState {
     private final Map<String, Player> players;
     @Getter
     private final List<Bullet> bullets;
+    @Getter
+    private final List<UserScore> userScores;
 
     public void addPlayer(String nickname) {
         players.put(nickname, new Player(nickname));
+        updateScore(null);
     }
 
     public Player removePlayer(String nickname) {
@@ -60,6 +64,7 @@ public class GameState {
         players = new ConcurrentHashMap<>();
         bullets = new CopyOnWriteArrayList<>();
         tankBodyModel = new TankBodyModel();
+        userScores = new ArrayList<>();
     }
 
     public UserGameState createUserGameState() {
@@ -73,6 +78,36 @@ public class GameState {
 
     public void setShoot(String username, boolean on) {
         players.get(username).setShooting(on);
+    }
+
+    private void updateScore(Player player) {
+        if (player != null) {
+            player.incScore();
+        }
+        UserScore.fillScoreList(this, this.userScores);
+    }
+
+    private void updateBullets(double deltaTime) {
+        for (Bullet bullet : bullets) {
+            boolean result = bullet.update(deltaTime);
+            if (!result) {
+                bullets.remove(bullet);
+                break;
+            }
+
+            for (String nickname : players.keySet()) {
+                Player curPlayer = players.get(nickname);
+                Vector3D pos = curPlayer.getPos();
+                double rotateAngle = curPlayer.getBodyAngle();
+                tankBodyModel.setModel(pos, rotateAngle);
+
+                if (!bullet.getPlayer().equals(players.get(nickname)) && tankBodyModel.isInside(bullet.getPos())) {
+                    logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
+                    updateScore(bullet.getPlayer());
+                    bullets.remove(bullet);
+                }
+            }
+        }
     }
 
     public void update() {
@@ -93,24 +128,6 @@ public class GameState {
                 createBullet(player.getNickname());
             }
         });
-        for (Bullet bullet : bullets) {
-            boolean result = bullet.update(deltaTime);
-            if (!result) {
-                bullets.remove(bullet);
-                break;
-            }
-
-            for (String nickname : players.keySet()) {
-                Player curPlayer = players.get(nickname);
-                Vector3D pos = curPlayer.getPos();
-                double rotateAngle = curPlayer.getBodyAngle();
-                tankBodyModel.setModel(pos, rotateAngle);
-
-                if (!bullet.getPlayer().equals(players.get(nickname)) && tankBodyModel.isInside(bullet.getPos())) {
-                    logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
-                    bullets.remove(bullet);
-                }
-            }
-        }
+        updateBullets(deltaTime);
     }
 }

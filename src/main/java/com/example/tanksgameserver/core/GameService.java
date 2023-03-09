@@ -4,8 +4,11 @@ import com.example.tanksgameserver.socketmodel.GameState;
 import com.example.tanksgameserver.socketmodel.message.Message;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
+import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -40,6 +43,10 @@ public class GameService extends Thread {
 
     public void setShoot(String nickname, boolean on) {
         gameState.setShoot(nickname, on);
+    }
+
+    public List<UserScore> getScoreBoard() {
+        return gameState.getUserScores();
     }
 
     @Override
