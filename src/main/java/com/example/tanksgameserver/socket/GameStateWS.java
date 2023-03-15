@@ -12,7 +12,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-
 import java.util.Arrays;
 
 @Controller
@@ -45,7 +44,7 @@ public class GameStateWS {
         }
     }
 
-    @Scheduled(fixedRate = 30)//30
+    @Scheduled(fixedRate = 30)
     public void sendToEverybody() {
         UserGameState state = gameService.getGameState().createUserGameState();
         simpMessagingTemplate.convertAndSend("/topic/gamestate", state);

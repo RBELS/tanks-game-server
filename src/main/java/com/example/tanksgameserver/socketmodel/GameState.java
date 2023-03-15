@@ -1,5 +1,7 @@
 package com.example.tanksgameserver.socketmodel;
 
+import com.example.tanksgameserver.socket.GameStateInverseWS;
+import com.example.tanksgameserver.socket.GameStateWS;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.models.TankBodyModel;
@@ -9,6 +11,8 @@ import lombok.Getter;
 import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,6 +21,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class GameState {
+    @Autowired
+    private GameStateInverseWS gameStateInverseWS;
+
     public static final Vector3D UP_VEC = new Vector3D(0.0, 1.0, 0.0);
     public static final Vector3D Z_AXIS_VEC = new Vector3D(0.0, 0.0, 1.0);
     public static final double PLAYER_SPEED = 6.0; //  UNITS/SEC
@@ -104,6 +111,7 @@ public class GameState {
                 if (!bullet.getPlayer().equals(players.get(nickname)) && tankBodyModel.isInside(bullet.getPos())) {
                     logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
                     updateScore(bullet.getPlayer());
+                    gameStateInverseWS.sendUpdateSignal();
                     bullets.remove(bullet);
                 }
             }
