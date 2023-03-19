@@ -127,8 +127,9 @@ public class Player {
         actualTopAngle += angle;
     }
 
-    public void hurt(int hurtHP) {
+    public boolean hurt(int hurtHP) {
         this.hp = Math.max(0, this.hp-hurtHP);
+        return this.hp == 0;
     }
 
     public void heal(int healHP) {
@@ -145,6 +146,11 @@ public class Player {
 
         double topRotAngle = getTopRotateMultiplier() * deltaTime * GameState.PLAYER_TOP_ROTATE_SPEED;
         this.rotateTop(topRotAngle);
+    }
+
+    public void respawn() {
+        heal(maxHP);
+        pos = new Vector3D(Math.random() * 30.0 - 10, Math.random() * 30.0 - 10, 0.0);
     }
 
 }

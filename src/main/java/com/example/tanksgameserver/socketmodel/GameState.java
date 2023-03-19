@@ -108,9 +108,12 @@ public class GameState {
 
                 if (!bullet.getPlayer().equals(players.get(nickname)) && tankBodyModel.isInside(bullet.getPos())) {
                     logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
-                    curPlayer.hurt(Bullet.DEFAULT_DAMAGE);
-                    updateScore(bullet.getPlayer());
-                    gameStateInverseWS.sendScoreboardUpdateSignal();
+                    boolean playerDead = curPlayer.hurt(Bullet.DEFAULT_DAMAGE);
+                    if (playerDead) {
+                        updateScore(bullet.getPlayer());
+                        gameStateInverseWS.sendScoreboardUpdateSignal();
+                        curPlayer.respawn();
+                    }
                     bullets.remove(bullet);
                     break;
                 }
