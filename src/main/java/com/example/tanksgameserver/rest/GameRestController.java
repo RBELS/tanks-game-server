@@ -1,5 +1,6 @@
 package com.example.tanksgameserver.rest;
 
+import com.example.tanksgameserver.config.AppConfig;
 import com.example.tanksgameserver.core.GameService;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.slf4j.Logger;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(value = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(value = AppConfig.SERVER_ADDRESS, allowCredentials = "true")
 public class GameRestController {
     @Autowired
     private GameService gameService;

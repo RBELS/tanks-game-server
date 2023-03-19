@@ -19,6 +19,10 @@ public class UserPlayerState {
     private final double topRotateAngle;
     @Getter
     private final int topRotateMultiplier;
+    @Getter
+    private final int hp;
+    @Getter
+    private final int maxHp;
 
     public UserPlayerState(Player player) {
         this.pos = new double[] {player.getPos().getX(), player.getPos().getY()};
@@ -27,6 +31,8 @@ public class UserPlayerState {
         this.bodyRotateMultiplier = player.getBodyRotateMultiplier();
         this.topRotateAngle = Math.toDegrees(player.getActualTopAngle());
         this.topRotateMultiplier = player.getTopRotateMultiplier();
+        this.hp = player.getHp();
+        this.maxHp = player.getMaxHP();
     }
 
 

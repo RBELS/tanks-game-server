@@ -6,12 +6,11 @@ import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.HashSet;
-
 
 public class Player {
     public static final double RELOAD_TIME = 1.0;
+    public static final int START_HP = 100;
     public static Logger logger = LoggerFactory.getLogger("Player");
     @Getter
     private final String nickname;
@@ -33,6 +32,10 @@ public class Player {
     @Getter @Setter
     private HashSet<String> keySet;
 
+    @Getter
+    private int hp;
+    @Getter @Setter
+    private int maxHP;
     @Getter @Setter
     private int score;
     public void incScore() {
@@ -50,6 +53,8 @@ public class Player {
         this.shooting = false;
         this.lastShootTime = 0.0;
         this.score = 0;
+        this.hp = START_HP;
+        this.maxHP = START_HP;
     }
 
     public int getMoveMultiplier() {
@@ -122,6 +127,14 @@ public class Player {
         actualTopAngle += angle;
     }
 
+    public void hurt(int hurtHP) {
+        this.hp = Math.max(0, this.hp-hurtHP);
+    }
+
+    public void heal(int healHP) {
+        this.hp = Math.min(this.maxHP, this.hp+healHP);
+    }
+
     public void update(double deltaTime) {
         double distance = getMoveMultiplier() * deltaTime * GameState.PLAYER_SPEED;
         pos = pos.add(this.bodyDir.scalarMultiply(distance));
@@ -133,7 +146,5 @@ public class Player {
         double topRotAngle = getTopRotateMultiplier() * deltaTime * GameState.PLAYER_TOP_ROTATE_SPEED;
         this.rotateTop(topRotAngle);
     }
-
-
 
 }
