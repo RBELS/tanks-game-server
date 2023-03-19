@@ -7,6 +7,7 @@ import org.apache.commons.math.geometry.Vector3D;
 public class Bullet {
     public static final double BULLET_V = 20.0;
     public static final double BULLET_MAX_DISTANCE = 50.0;
+    public static final int DEFAULT_DAMAGE = 10;
 
     @Getter @Setter
     private Vector3D pos;
