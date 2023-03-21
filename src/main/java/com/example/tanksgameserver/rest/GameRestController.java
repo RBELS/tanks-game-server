@@ -1,7 +1,7 @@
 package com.example.tanksgameserver.rest;
 
 import com.example.tanksgameserver.config.AppConfig;
-import com.example.tanksgameserver.core.GameService;
+import com.example.tanksgameserver.core.LobbyService;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.util.Map;
 @CrossOrigin(value = AppConfig.SERVER_ADDRESS, allowCredentials = "true")
 public class GameRestController {
     @Autowired
-    private GameService gameService;
+    private LobbyService lobbyService;
 
     private final Logger logger = LoggerFactory.getLogger("Game Rest Controller");
 
@@ -25,13 +25,13 @@ public class GameRestController {
         if (username == null) return;
         logger.info("Login " + username);
 
-        if (!gameService.playerExists(username)) {
-            gameService.createPlayer(username);
+        if (!lobbyService.playerExists(username)) {
+            lobbyService.createPlayer(username);
         }
     }
 
     @GetMapping (value = "/scoreboard", produces = MediaType.APPLICATION_JSON_VALUE)
     private List<UserScore> getScoreboard() {
-        return gameService.getScoreBoard();
+        return lobbyService.getScoreBoard();
     }
 }

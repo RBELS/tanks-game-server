@@ -1,6 +1,6 @@
 package com.example.tanksgameserver.socket;
 
-import com.example.tanksgameserver.core.GameService;
+import com.example.tanksgameserver.core.LobbyService;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.SimpleActionMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
@@ -20,33 +20,33 @@ public class GameStateWS {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
-    private GameService gameService;
+    private LobbyService lobbyService;
 
     private final Logger logger = LoggerFactory.getLogger("Websocket connection");
 
     @MessageMapping("/updatePos")
     public void updatePos(PosMessage posMessage) {
-        gameService.processPlayerMessage(posMessage);
+        lobbyService.processPlayerMessage(posMessage);
         logger.info(posMessage.getName() + "\t" + Arrays.toString(posMessage.getInput()));
     }
 
     @MessageMapping("/updateTopAngle")
     public void updateTopAngle(TopAngleMessage topAngleMessage) {
-        gameService.processPlayerMessage(topAngleMessage);
+        lobbyService.processPlayerMessage(topAngleMessage);
     }
 
     @MessageMapping("/action")
     public void actionMessage(SimpleActionMessage message) {
         logger.info(message.getName() + "\t" + message.getAction());
         switch (message.getAction()) {
-            case SimpleActionMessage.SHOOT_ACTION_ON -> gameService.setShoot(message.getName(), true);
-            case SimpleActionMessage.SHOOT_ACTION_OFF -> gameService.setShoot(message.getName(), false);
+            case SimpleActionMessage.SHOOT_ACTION_ON -> lobbyService.setShoot(message.getName(), true);
+            case SimpleActionMessage.SHOOT_ACTION_OFF -> lobbyService.setShoot(message.getName(), false);
         }
     }
 
     @Scheduled(fixedRate = 30)
     public void sendToEverybody() {
-        UserGameState state = gameService.getGameState().createUserGameState();
+        UserGameState state = lobbyService.getGameState().createUserGameState();
         simpMessagingTemplate.convertAndSend("/topic/gamestate", state);
     }
 }

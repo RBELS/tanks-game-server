@@ -12,11 +12,11 @@ import java.util.List;
 
 
 @Service
-public class GameService extends Thread {
+public class LobbyService extends Thread {
     private final GameState gameState;
 
     @Autowired
-    public GameService(GameState gameState) {
+    public LobbyService(GameState gameState) {
         this.gameState = gameState;
         this.start();
     }
