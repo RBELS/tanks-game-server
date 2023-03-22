@@ -25,6 +25,7 @@ public class GameRestController {
     private void createPlayer(@RequestBody Map<String, String> bodyParams) {
         String username = bodyParams.get("username");
         String lobbyId = bodyParams.get("lobbyId");
+
         if (username == null) return;
         logger.info("Login " + username);
 
@@ -37,10 +38,8 @@ public class GameRestController {
     @PostMapping (value = "/createLobby", produces = MediaType.APPLICATION_JSON_VALUE)
     private UserLobby createLobby() {
         String lobbyId = lobbyService.createLobby();
-        logger.info("Lobby created");
-//        return lobbyId;
-        UserLobby userLobby = new UserLobby(lobbyId);
-        return userLobby;
+        logger.info("Lobby " + lobbyId + " created");
+        return new UserLobby(lobbyId);
     }
 
     @GetMapping (value = "/scoreboard", produces = MediaType.APPLICATION_JSON_VALUE)

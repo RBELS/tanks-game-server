@@ -36,6 +36,10 @@ public class LobbyService extends Thread {
         return LOBBY_KEY;
     }
 
+//    public String joinLobby(String lobbyId) {
+//
+//    }
+
     private String genLobbyId(int len) {
         int range = 'z' - 'a' + 1;
         StringBuilder stringBuilder = new StringBuilder();
