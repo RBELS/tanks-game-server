@@ -7,8 +7,8 @@ public class PosMessage extends Message {
     @Getter @Setter
     private String[] input;
 
-    public PosMessage(String name, String[] input) {
-        super(name);
+    public PosMessage(String lobbyId, String name, String[] input) {
+        super(lobbyId, name);
         this.input = input;
     }
 }

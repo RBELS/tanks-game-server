@@ -7,8 +7,8 @@ public class TopAngleMessage extends Message {
     @Getter @Setter
     private double topAngle;
 
-    public TopAngleMessage(String name, double topAngle) {
-        super(name);
+    public TopAngleMessage(String lobbyId, String name, double topAngle) {
+        super(lobbyId, name);
         this.topAngle = topAngle;
     }
 }

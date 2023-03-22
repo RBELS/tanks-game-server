@@ -9,8 +9,8 @@ public class SimpleActionMessage extends Message {
     @Getter
     private int action;
 
-    public SimpleActionMessage(String name, int action) {
-        super(name);
+    public SimpleActionMessage(String lobbyId, String name, int action) {
+        super(lobbyId, name);
         this.action = action;
     }
 }

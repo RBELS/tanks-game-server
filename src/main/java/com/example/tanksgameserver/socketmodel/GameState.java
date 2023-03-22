@@ -10,16 +10,13 @@ import lombok.Getter;
 import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Component
+//@Component
 public class GameState {
-    @Autowired
     private GameStateInverseWS gameStateInverseWS;
 
     public static final Vector3D UP_VEC = new Vector3D(0.0, 1.0, 0.0);
@@ -30,6 +27,7 @@ public class GameState {
 
     private final Logger logger = LoggerFactory.getLogger("Game State");
     private final TankBodyModel tankBodyModel;
+    private final String lobbyId;
 
     @Getter
     private Double prevTime = null;
@@ -65,11 +63,14 @@ public class GameState {
         targetPlayer.setDestTopAngle(Math.toRadians(topAngleMessage.getTopAngle()));
     }
 
-    public GameState() {
+    public GameState(GameStateInverseWS gameStateInverseWS, String lobbyId) {
         players = new ConcurrentHashMap<>();
         bullets = new CopyOnWriteArrayList<>();
         tankBodyModel = new TankBodyModel();
         userScores = new ArrayList<>();
+        this.lobbyId = lobbyId;
+
+        this.gameStateInverseWS = gameStateInverseWS;
     }
 
     public UserGameState createUserGameState() {
@@ -111,7 +112,7 @@ public class GameState {
                     boolean playerDead = curPlayer.hurt(Bullet.DEFAULT_DAMAGE);
                     if (playerDead) {
                         updateScore(bullet.getPlayer());
-                        gameStateInverseWS.sendScoreboardUpdateSignal();
+                        gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
                         curPlayer.respawn();
                     }
                     bullets.remove(bullet);

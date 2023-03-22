@@ -2,6 +2,8 @@ package com.example.tanksgameserver.rest;
 
 import com.example.tanksgameserver.config.AppConfig;
 import com.example.tanksgameserver.core.LobbyService;
+import com.example.tanksgameserver.socketmodel.lobby.Lobby;
+import com.example.tanksgameserver.socketmodel.usergamestate.UserLobby;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,16 +24,28 @@ public class GameRestController {
     @PostMapping (value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     private void createPlayer(@RequestBody Map<String, String> bodyParams) {
         String username = bodyParams.get("username");
+        String lobbyId = bodyParams.get("lobbyId");
         if (username == null) return;
         logger.info("Login " + username);
 
-        if (!lobbyService.playerExists(username)) {
-            lobbyService.createPlayer(username);
+        Lobby lobby = lobbyService.getLobby(lobbyId);
+        if (!lobby.playerExists(username)) {
+            lobby.createPlayer(username);
         }
     }
 
+    @PostMapping (value = "/createLobby", produces = MediaType.APPLICATION_JSON_VALUE)
+    private UserLobby createLobby() {
+        String lobbyId = lobbyService.createLobby();
+        logger.info("Lobby created");
+//        return lobbyId;
+        UserLobby userLobby = new UserLobby(lobbyId);
+        return userLobby;
+    }
+
     @GetMapping (value = "/scoreboard", produces = MediaType.APPLICATION_JSON_VALUE)
-    private List<UserScore> getScoreboard() {
-        return lobbyService.getScoreBoard();
+    private List<UserScore> getScoreboard(@RequestParam String lobbyId) {
+        Lobby lobby = lobbyService.getLobby(lobbyId);
+        return lobby.getScoreBoard();
     }
 }
