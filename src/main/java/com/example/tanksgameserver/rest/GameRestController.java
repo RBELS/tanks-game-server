@@ -36,15 +36,25 @@ public class GameRestController {
     }
 
     @PostMapping (value = "/createLobby", produces = MediaType.APPLICATION_JSON_VALUE)
-    private UserLobby createLobby() {
-        String lobbyId = lobbyService.createLobby();
-        logger.info("Lobby " + lobbyId + " created");
-        return new UserLobby(lobbyId);
+    private UserLobby createLobby(@RequestBody Map<String, String> bodyParams) {
+        String username = bodyParams.get("username");
+        String lobbyName = bodyParams.get("lobbyName");
+
+        Lobby newLobby = lobbyService.createLobby(username, lobbyName);
+        logger.info("Lobby " + newLobby.getLobbyId() + " created");
+        return new UserLobby(newLobby);
     }
 
-    @GetMapping (value = "/scoreboard", produces = MediaType.APPLICATION_JSON_VALUE)
-    private List<UserScore> getScoreboard(@RequestParam String lobbyId) {
+    @GetMapping (value = "/scoreboard/{lobbyId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    private List<UserScore> getScoreboard(@PathVariable("lobbyId") String lobbyId) {
         Lobby lobby = lobbyService.getLobby(lobbyId);
         return lobby.getScoreBoard();
+    }
+
+    @GetMapping (value = "/lobbies")
+    private List<UserLobby> getLobbies() {
+        return lobbyService.getLobbies().
+                values().stream().
+                map(UserLobby::new).toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.tanksgameserver.socketmodel.lobby;
 
 import com.example.tanksgameserver.socketmodel.GameState;
+import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import lombok.Getter;
 
@@ -11,10 +12,16 @@ public class Lobby {
     private final GameState gameState;
     @Getter
     private final String lobbyId;
+    @Getter
+    private final String lobbyName;
+    @Getter
+    private final Player lobbyLeader;
 
-    public Lobby(GameState gameState, String lobbyId) {
+    public Lobby(GameState gameState, String lobbyId, String leaderUsername, String lobbyName) {
         this.gameState = gameState;
         this.lobbyId = lobbyId;
+        this.lobbyName = lobbyName;
+        this.lobbyLeader = gameState.addPlayer(leaderUsername);
     }
 
     public boolean playerExists(String nickname) {
@@ -31,5 +38,9 @@ public class Lobby {
 
     public List<UserScore> getScoreBoard() {
         return gameState.getUserScores();
+    }
+
+    public int getPlayersCount() {
+        return gameState.getPlayers().size();
     }
 }

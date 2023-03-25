@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 //@Component
 public class GameState {
-    private GameStateInverseWS gameStateInverseWS;
+    private final GameStateInverseWS gameStateInverseWS;
 
     public static final Vector3D UP_VEC = new Vector3D(0.0, 1.0, 0.0);
     public static final Vector3D Z_AXIS_VEC = new Vector3D(0.0, 0.0, 1.0);
@@ -38,9 +38,12 @@ public class GameState {
     @Getter
     private final List<UserScore> userScores;
 
-    public void addPlayer(String nickname) {
-        players.put(nickname, new Player(nickname));
+    public Player addPlayer(String nickname) {
+        Player newPlayer = new Player(nickname);
+        players.put(nickname, newPlayer);
         updateScore(null);
+        gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
+        return newPlayer;
     }
 
     public Player removePlayer(String nickname) {

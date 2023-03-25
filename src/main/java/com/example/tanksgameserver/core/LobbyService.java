@@ -6,13 +6,11 @@ import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.message.Message;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
-import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Service
@@ -21,24 +19,25 @@ public class LobbyService extends Thread {
     private final GameStateInverseWS gameStateInverseWS;
     //injected fields
     private final Map<String, Lobby> lobbiesMap;
-    private static final String LOBBY_KEY = "lobby1";
+    private static final int DEFAULT_LOBBY_ID_LEN = 6;
 
     @Autowired
     public LobbyService(GameStateInverseWS gameStateInverseWS) {
         this.gameStateInverseWS = gameStateInverseWS;
-        lobbiesMap = new HashMap<>();
+        lobbiesMap = new ConcurrentHashMap<>();
         this.start();
     }
 
-    public String createLobby() {
-        Lobby newLobby = new Lobby(new GameState(gameStateInverseWS, LOBBY_KEY), LOBBY_KEY);
-        lobbiesMap.put(LOBBY_KEY, newLobby);
-        return LOBBY_KEY;
-    }
+    public Lobby createLobby(String leaderUsername, String lobbyName) {
+        String newLobbyId;
+        do {
+            newLobbyId = genLobbyId(DEFAULT_LOBBY_ID_LEN);
+        } while (lobbiesMap.containsKey(newLobbyId));
 
-//    public String joinLobby(String lobbyId) {
-//
-//    }
+        Lobby newLobby = new Lobby(new GameState(gameStateInverseWS, newLobbyId), newLobbyId, leaderUsername, lobbyName);
+        lobbiesMap.put(newLobbyId, newLobby);
+        return newLobby;
+    }
 
     private String genLobbyId(int len) {
         int range = 'z' - 'a' + 1;
