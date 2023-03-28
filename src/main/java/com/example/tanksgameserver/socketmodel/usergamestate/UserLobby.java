@@ -15,7 +15,7 @@ public class UserLobby {
 
     public UserLobby(Lobby lobby) {
         this.lobbyId = lobby.getLobbyId();
-        this.leader = lobby.getLobbyLeader().getNickname();
+        this.leader = lobby.getLobbyLeader();
         this.playersCount = lobby.getPlayersCount();
         this.lobbyName = lobby.getLobbyName();
     }

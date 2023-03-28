@@ -69,13 +69,14 @@ public class GameStateWS {
 
         String username = args.get("username").get(0);
         String lobbyId = args.get("lobbyId").get(0);
+        String playerId = (String) event.getMessage().getHeaders().get("simpSessionId");
 
         if (username == null) return;
-        logger.info("Login " + username);
+        logger.info("Login " + username + " " + playerId);
 
         Lobby lobby = lobbyService.getLobby(lobbyId);
         if (!lobby.playerExists(username)) {
-            lobby.createPlayer(username);
+            lobby.createPlayer(username, playerId);
         }
     }
 

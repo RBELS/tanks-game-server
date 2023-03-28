@@ -38,7 +38,7 @@ public class GameState extends Thread {
     @Getter
     private final List<UserScore> userScores;
 
-    public Player addPlayer(String nickname) {
+    public Player addPlayer(String nickname, String playerId) {
         Player newPlayer = new Player(nickname);
         players.put(nickname, newPlayer);
         updateScore(null);
