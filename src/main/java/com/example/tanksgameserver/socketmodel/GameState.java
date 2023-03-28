@@ -46,8 +46,8 @@ public class GameState extends Thread {
         return newPlayer;
     }
 
-    public Player removePlayer(String nickname) {
-        return players.remove(nickname);
+    public Player removePlayer(String playerId) {
+        return players.remove(playerId);
     }
 
     public void processPlayerPosMessage(PosMessage posMessage) {

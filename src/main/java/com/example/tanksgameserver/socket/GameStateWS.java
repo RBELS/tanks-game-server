@@ -1,6 +1,8 @@
 package com.example.tanksgameserver.socket;
 
 import com.example.tanksgameserver.core.LobbyService;
+import com.example.tanksgameserver.socketmodel.GameState;
+import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.SimpleActionMessage;
@@ -29,6 +31,8 @@ public class GameStateWS {
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private LobbyService lobbyService;
+    @Autowired
+    private GameStateInverseWS gameStateInverseWS;
 
     private final Logger logger = LoggerFactory.getLogger("Websocket connection");
 
@@ -64,7 +68,6 @@ public class GameStateWS {
 
     @EventListener
     public void listenEvent(SessionConnectEvent event) {
-        logger.info("Connect event");
         var args = (Map<String, ArrayList<String>>) event.getMessage().getHeaders().get("nativeHeaders");
 
         String username = args.get("username").get(0);
@@ -82,6 +85,15 @@ public class GameStateWS {
 
     @EventListener
     public void listenEvent(SessionDisconnectEvent event) {
-        logger.info("Disconnect event");
+        String playerId = (String) event.getMessage().getHeaders().get("simpSessionId");
+        for (Lobby lobby : lobbyService.getLobbies().values()) {
+            GameState gameState = lobby.getGameState();
+            Player deletedPlayer = gameState.removePlayer(playerId);
+            if (deletedPlayer != null) {
+                deletedPlayer = null;
+                gameStateInverseWS.sendScoreboardUpdateSignal(lobby.getLobbyId());
+                break;
+            }
+        }
     }
 }
