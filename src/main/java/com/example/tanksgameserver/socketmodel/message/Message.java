@@ -5,14 +5,14 @@ import lombok.Setter;
 
 public abstract class Message {
     @Getter @Setter
-    private String name;
+    private String playerId;
     @Getter @Setter
     private String lobbyId;
 
     public Message() {}
 
-    public Message(String lobbyId, String name) {
+    public Message(String lobbyId, String playerId) {
         this.lobbyId = lobbyId;
-        this.name = name;
+        this.playerId = playerId;
     }
 }

@@ -36,10 +36,10 @@ public class UserPlayerState {
     }
 
 
-    public static Map<String, UserPlayerState> createUserPlayerArr(Map<String, Player> players) {
+    public static Map<String, UserPlayerState> createUserPlayerMap(Map<String, Player> players) {
         HashMap<String, UserPlayerState> userPlayers = new HashMap<>();
-        for (String nickname : players.keySet()) {
-            userPlayers.put(nickname, new UserPlayerState(players.get(nickname)));
+        for (Player somePlayer : players.values()) {
+            userPlayers.put(somePlayer.getNickname(), new UserPlayerState(somePlayer));
         }
         return userPlayers;
     }

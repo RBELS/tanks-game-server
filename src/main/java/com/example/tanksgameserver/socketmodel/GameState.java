@@ -39,8 +39,8 @@ public class GameState extends Thread {
     private final List<UserScore> userScores;
 
     public Player addPlayer(String nickname, String playerId) {
-        Player newPlayer = new Player(nickname);
-        players.put(nickname, newPlayer);
+        Player newPlayer = new Player(nickname, playerId);
+        players.put(playerId, newPlayer);
         updateScore(null);
         gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
         return newPlayer;
@@ -51,8 +51,8 @@ public class GameState extends Thread {
     }
 
     public void processPlayerPosMessage(PosMessage posMessage) {
-        String username = posMessage.getName();
-        Player targetPlayer = players.get(username);
+        String playerId = posMessage.getPlayerId();
+        Player targetPlayer = players.get(playerId);
         if (targetPlayer == null) return;
 
         HashSet<String> newKeySet = new HashSet<>(Arrays.asList(posMessage.getInput()));
@@ -60,7 +60,7 @@ public class GameState extends Thread {
     }
 
     public void processPlayerTopAngleMessage(TopAngleMessage topAngleMessage) {
-        Player targetPlayer = players.get(topAngleMessage.getName());
+        Player targetPlayer = players.get(topAngleMessage.getPlayerId());
         if (targetPlayer == null) return;
 
         targetPlayer.setDestTopAngle(Math.toRadians(topAngleMessage.getTopAngle()));
@@ -81,13 +81,13 @@ public class GameState extends Thread {
         return new UserGameState(this);
     }
 
-    private void createBullet(String username) {
-        Bullet newBullet = new Bullet(players.get(username));
+    private void createBullet(Player shootingPlayer) {
+        Bullet newBullet = new Bullet(shootingPlayer);
         bullets.add(newBullet);
     }
 
-    public void setShoot(String username, boolean on) {
-        players.get(username).setShooting(on);
+    public void setShoot(String playerId, boolean on) {
+        players.get(playerId).setShooting(on);
     }
 
     private void updateScore(Player player) {
@@ -141,7 +141,7 @@ public class GameState extends Thread {
             player.update(deltaTime);
             if (player.isShooting() && finalNewTime - player.getLastShootTime() >= Player.RELOAD_TIME ) {
                 player.setLastShootTime(finalNewTime);
-                createBullet(player.getNickname());
+                createBullet(player);
             }
         });
         updateBullets(deltaTime);

@@ -35,7 +35,7 @@ public class GameStateWS {
     @MessageMapping("/updatePos")
     public void updatePos(PosMessage posMessage) {
         lobbyService.processPlayerMessage(posMessage);
-        logger.info(posMessage.getName() + "\t" + Arrays.toString(posMessage.getInput()));
+        logger.info(posMessage.getPlayerId() + "\t" + Arrays.toString(posMessage.getInput()));
     }
 
     @MessageMapping("/updateTopAngle")
@@ -45,10 +45,10 @@ public class GameStateWS {
 
     @MessageMapping("/action")
     public void actionMessage(SimpleActionMessage message) {
-        logger.info(message.getName() + "\t" + message.getAction());
+        logger.info(message.getPlayerId() + "\t" + message.getAction());
         switch (message.getAction()) {
-            case SimpleActionMessage.SHOOT_ACTION_ON -> lobbyService.getLobby(message.getLobbyId()).setShoot(message.getName(), true);
-            case SimpleActionMessage.SHOOT_ACTION_OFF -> lobbyService.getLobby(message.getLobbyId()).setShoot(message.getName(), false);
+            case SimpleActionMessage.SHOOT_ACTION_ON -> lobbyService.getLobby(message.getLobbyId()).setShoot(message.getPlayerId(), true);
+            case SimpleActionMessage.SHOOT_ACTION_OFF -> lobbyService.getLobby(message.getLobbyId()).setShoot(message.getPlayerId(), false);
         }
     }
 

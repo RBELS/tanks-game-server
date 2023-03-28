@@ -15,6 +15,8 @@ public class Player {
     @Getter
     private final String nickname;
     @Getter
+    private final String playerId;
+    @Getter
     private Vector3D pos;
     @Getter
     private Vector3D bodyDir;
@@ -42,8 +44,9 @@ public class Player {
         this.score += 1;
     }
 
-    public Player(String nickname) {
+    public Player(String nickname, String playerId) {
         this.nickname = nickname;
+        this.playerId = playerId;
         this.pos = new Vector3D(0.0, 0.0, 0.0);
         this.bodyDir = new Vector3D(GameState.UP_VEC.getX(), GameState.UP_VEC.getY(), GameState.UP_VEC.getZ());
         this.bodyAngle = 0.0;

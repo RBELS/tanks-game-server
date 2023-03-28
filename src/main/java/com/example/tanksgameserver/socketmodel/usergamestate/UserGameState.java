@@ -16,7 +16,7 @@ public class UserGameState {
 
     public UserGameState(GameState gs) {
         this.serverTime = gs.getPrevTime();
-        this.players = UserPlayerState.createUserPlayerArr(gs.getPlayers());
+        this.players = UserPlayerState.createUserPlayerMap(gs.getPlayers());
         this.bullets = UserBulletState.createState(gs.getBullets());
     }
 }
