@@ -23,16 +23,16 @@ public class GameRestController {
 
     @PostMapping (value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     private void createPlayer(@RequestBody Map<String, String> bodyParams) {
-        String username = bodyParams.get("username");
-        String lobbyId = bodyParams.get("lobbyId");
-
-        if (username == null) return;
-        logger.info("Login " + username);
-
-        Lobby lobby = lobbyService.getLobby(lobbyId);
-        if (!lobby.playerExists(username)) {
-            lobby.createPlayer(username);
-        }
+//        String username = bodyParams.get("username");
+//        String lobbyId = bodyParams.get("lobbyId");
+//
+//        if (username == null) return;
+//        logger.info("Login " + username);
+//
+//        Lobby lobby = lobbyService.getLobby(lobbyId);
+//        if (!lobby.playerExists(username)) {
+//            lobby.createPlayer(username);
+//        }
     }
 
     @PostMapping (value = "/createLobby", produces = MediaType.APPLICATION_JSON_VALUE)

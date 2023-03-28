@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @Service
-public class LobbyService extends Thread {
+public class LobbyService {
     //injected fields
     private final GameStateInverseWS gameStateInverseWS;
     //injected fields
@@ -25,7 +25,7 @@ public class LobbyService extends Thread {
     public LobbyService(GameStateInverseWS gameStateInverseWS) {
         this.gameStateInverseWS = gameStateInverseWS;
         lobbiesMap = new ConcurrentHashMap<>();
-        this.start();
+//        this.start();
     }
 
     public Lobby createLobby(String leaderUsername, String lobbyName) {
@@ -70,15 +70,4 @@ public class LobbyService extends Thread {
         return lobbiesMap;
     }
 
-    @Override
-    public void run() {
-        super.run();
-
-        while (true) {
-            for (String lobbyId : lobbiesMap.keySet()) {
-                GameState gameState = lobbiesMap.get(lobbyId).getGameState();
-                gameState.update();
-            }
-        }
-    }
 }

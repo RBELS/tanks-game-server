@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 //@Component
-public class GameState {
+public class GameState extends Thread {
     private final GameStateInverseWS gameStateInverseWS;
 
     public static final Vector3D UP_VEC = new Vector3D(0.0, 1.0, 0.0);
@@ -74,6 +74,7 @@ public class GameState {
         this.lobbyId = lobbyId;
 
         this.gameStateInverseWS = gameStateInverseWS;
+        this.start();
     }
 
     public UserGameState createUserGameState() {
@@ -144,5 +145,13 @@ public class GameState {
             }
         });
         updateBullets(deltaTime);
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        while (true) {
+            this.update();
+        }
     }
 }

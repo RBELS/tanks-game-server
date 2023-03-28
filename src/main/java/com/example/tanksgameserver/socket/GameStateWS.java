@@ -9,10 +9,15 @@ import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -55,5 +60,27 @@ public class GameStateWS {
             UserGameState state = lobbiesMap.get(lobbyId).getGameState().createUserGameState();
             simpMessagingTemplate.convertAndSend("/topic/gamestate/" + lobbyId, state);
         });
+    }
+
+    @EventListener
+    public void listenEvent(SessionConnectEvent event) {
+        logger.info("Connect event");
+        var args = (Map<String, ArrayList<String>>) event.getMessage().getHeaders().get("nativeHeaders");
+
+        String username = args.get("username").get(0);
+        String lobbyId = args.get("lobbyId").get(0);
+
+        if (username == null) return;
+        logger.info("Login " + username);
+
+        Lobby lobby = lobbyService.getLobby(lobbyId);
+        if (!lobby.playerExists(username)) {
+            lobby.createPlayer(username);
+        }
+    }
+
+    @EventListener
+    public void listenEvent(SessionDisconnectEvent event) {
+        logger.info("Disconnect event");
     }
 }
