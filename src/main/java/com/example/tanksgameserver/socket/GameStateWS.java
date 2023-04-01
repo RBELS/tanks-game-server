@@ -77,6 +77,10 @@ public class GameStateWS {
         if (username == null) return;
         logger.info("Login " + username + " " + playerId);
 
+        if (lobbyService.usernameExists(lobbyId, username)) {
+            return;
+        }
+
         Lobby lobby = lobbyService.getLobby(lobbyId);
         if (!lobby.playerExists(username)) {
             lobby.createPlayer(username, playerId);

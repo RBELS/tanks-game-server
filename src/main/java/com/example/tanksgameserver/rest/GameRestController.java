@@ -2,6 +2,7 @@ package com.example.tanksgameserver.rest;
 
 import com.example.tanksgameserver.config.AppConfig;
 import com.example.tanksgameserver.core.LobbyService;
+import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserLobby;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
@@ -21,20 +22,6 @@ public class GameRestController {
 
     private final Logger logger = LoggerFactory.getLogger("Game Rest Controller");
 
-    @PostMapping (value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    private void createPlayer(@RequestBody Map<String, String> bodyParams) {
-//        String username = bodyParams.get("username");
-//        String lobbyId = bodyParams.get("lobbyId");
-//
-//        if (username == null) return;
-//        logger.info("Login " + username);
-//
-//        Lobby lobby = lobbyService.getLobby(lobbyId);
-//        if (!lobby.playerExists(username)) {
-//            lobby.createPlayer(username);
-//        }
-    }
-
     @PostMapping (value = "/createLobby", produces = MediaType.APPLICATION_JSON_VALUE)
     private UserLobby createLobby(@RequestBody Map<String, String> bodyParams) {
         String username = bodyParams.get("username");
@@ -49,6 +36,11 @@ public class GameRestController {
     private List<UserScore> getScoreboard(@PathVariable("lobbyId") String lobbyId) {
         Lobby lobby = lobbyService.getLobby(lobbyId);
         return lobby.getScoreBoard();
+    }
+
+    @GetMapping (value = "/usernameExists/{lobbyId}/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    private boolean usernameExists(@PathVariable("lobbyId") String lobbyId, @PathVariable("username") String username) {
+        return !lobbyService.usernameExists(lobbyId, username);
     }
 
     @GetMapping (value = "/lobbies")

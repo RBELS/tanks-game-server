@@ -2,6 +2,7 @@ package com.example.tanksgameserver.core;
 
 import com.example.tanksgameserver.socket.GameStateInverseWS;
 import com.example.tanksgameserver.socketmodel.GameState;
+import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.message.Message;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
@@ -68,6 +69,12 @@ public class LobbyService {
 
     public Map<String, Lobby> getLobbies() {
         return lobbiesMap;
+    }
+
+    public boolean usernameExists(String lobbyId, String username) {
+        Map<String, Player> playerMap = lobbiesMap.get(lobbyId).getGameState().getPlayers();
+        boolean result = playerMap.values().stream().anyMatch(player -> player.getNickname().equals(username));
+        return result;
     }
 
 }
