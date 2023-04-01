@@ -9,10 +9,8 @@ import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 @Service
 public class LobbyService {
@@ -26,7 +24,6 @@ public class LobbyService {
     public LobbyService(GameStateInverseWS gameStateInverseWS) {
         this.gameStateInverseWS = gameStateInverseWS;
         lobbiesMap = new ConcurrentHashMap<>();
-//        this.start();
     }
 
     public Lobby createLobby(String leaderUsername, String lobbyName) {
@@ -38,6 +35,10 @@ public class LobbyService {
         Lobby newLobby = new Lobby(new GameState(gameStateInverseWS, newLobbyId), newLobbyId, leaderUsername, lobbyName);
         lobbiesMap.put(newLobbyId, newLobby);
         return newLobby;
+    }
+
+    public void removeLobby(String lobbyId) {
+        lobbiesMap.remove(lobbyId);
     }
 
     private String genLobbyId(int len) {

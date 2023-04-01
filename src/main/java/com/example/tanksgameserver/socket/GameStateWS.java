@@ -93,11 +93,17 @@ public class GameStateWS {
         for (Lobby lobby : lobbyService.getLobbies().values()) {
             GameState gameState = lobby.getGameState();
             Player deletedPlayer = gameState.removePlayer(playerId);
-            if (deletedPlayer != null) {
-                deletedPlayer = null;
-                gameStateInverseWS.sendScoreboardUpdateSignal(lobby.getLobbyId());
+            if (deletedPlayer == null) {
+                continue;
+            }
+
+            deletedPlayer = null;
+            if (lobby.getPlayersCount() == 0) {
+                lobbyService.removeLobby(lobby.getLobbyId());
                 break;
             }
+            gameStateInverseWS.sendScoreboardUpdateSignal(lobby.getLobbyId());
+            break;
         }
     }
 }
