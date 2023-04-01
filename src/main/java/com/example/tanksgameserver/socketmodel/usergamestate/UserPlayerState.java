@@ -20,9 +20,9 @@ public class UserPlayerState {
     @Getter
     private final int topRotateMultiplier;
     @Getter
-    private final int hp;
+    private final double hp;
     @Getter
-    private final int maxHp;
+    private final double maxHp;
 
     public UserPlayerState(Player player) {
         this.pos = new double[] {player.getPos().getX(), player.getPos().getY()};

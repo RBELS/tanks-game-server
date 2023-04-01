@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-//@Component
 public class GameState extends Thread {
     private final GameStateInverseWS gameStateInverseWS;
 
@@ -24,6 +24,8 @@ public class GameState extends Thread {
     public static final double PLAYER_SPEED = 6.0; //  UNITS/SEC
     public static final double PLAYER_ROTATE_SPEED = Math.toRadians(80.0); // DEG/SEC
     public static final double PLAYER_TOP_ROTATE_SPEED = Math.toRadians(160.0); // DEG/SEC
+    public static final double HP_LOSS = 20.0; // HP/SEC
+    public static final double GAME_MAP_WIDTH = 100.0;
 
     private final Logger logger = LoggerFactory.getLogger("Game State");
     private final TankBodyModel tankBodyModel;
@@ -41,7 +43,7 @@ public class GameState extends Thread {
     public Player addPlayer(String nickname, String playerId) {
         Player newPlayer = new Player(nickname, playerId);
         players.put(playerId, newPlayer);
-        updateScore(null);
+        updateScore(null, 0);
         gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
         return newPlayer;
     }
@@ -90,9 +92,9 @@ public class GameState extends Thread {
         players.get(playerId).setShooting(on);
     }
 
-    private void updateScore(Player player) {
+    private void updateScore(Player player, int count) {
         if (player != null) {
-            player.incScore();
+            player.addScore(count);
         }
         UserScore.fillScoreList(this, this.userScores);
     }
@@ -115,7 +117,7 @@ public class GameState extends Thread {
                     logger.info("Penetration: " + nickname + "\t" + bullet.getPos().getX() + "\t" + bullet.getPos().getY());
                     boolean playerDead = curPlayer.hurt(Bullet.DEFAULT_DAMAGE);
                     if (playerDead) {
-                        updateScore(bullet.getPlayer());
+                        updateScore(bullet.getPlayer(), 1);
                         gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
                         curPlayer.respawn();
                     }
@@ -123,6 +125,23 @@ public class GameState extends Thread {
                     break;
                 }
             }
+        }
+    }
+
+    private void updateGameMapBordersHP(double deltaTime) {
+        AtomicBoolean shouldUpdateScoreboard = new AtomicBoolean(false);
+        getPlayers().values().forEach(player -> {
+            if (player.isOutField()) {
+                boolean playerDead = player.hurt(deltaTime * GameState.HP_LOSS);
+                if (playerDead) {
+                    updateScore(player, -1);
+                    shouldUpdateScoreboard.set(true);
+                    player.respawn();
+                }
+            }
+        });
+        if (shouldUpdateScoreboard.get()) {
+            gameStateInverseWS.sendScoreboardUpdateSignal(this.lobbyId);
         }
     }
 
@@ -145,6 +164,7 @@ public class GameState extends Thread {
             }
         });
         updateBullets(deltaTime);
+        updateGameMapBordersHP(deltaTime);
     }
 
     @Override

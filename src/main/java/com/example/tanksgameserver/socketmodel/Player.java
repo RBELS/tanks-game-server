@@ -7,10 +7,11 @@ import org.apache.commons.math.geometry.Vector3D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Player {
     public static final double RELOAD_TIME = 1.0;
-    public static final int START_HP = 100;
+    public static final double START_HP = 100.0;
     public static Logger logger = LoggerFactory.getLogger("Player");
     @Getter
     private final String nickname;
@@ -35,13 +36,13 @@ public class Player {
     private HashSet<String> keySet;
 
     @Getter
-    private int hp;
+    private double hp;
     @Getter @Setter
-    private int maxHP;
+    private double maxHP;
     @Getter @Setter
     private int score;
-    public void incScore() {
-        this.score += 1;
+    public void addScore(int count) {
+        this.score += count;
     }
 
     public Player(String nickname, String playerId) {
@@ -130,12 +131,12 @@ public class Player {
         actualTopAngle += angle;
     }
 
-    public boolean hurt(int hurtHP) {
-        this.hp = Math.max(0, this.hp-hurtHP);
-        return this.hp == 0;
+    public boolean hurt(double hurtHP) {
+        this.hp = Math.max(0.0, this.hp-hurtHP);
+        return this.hp == 0.0;
     }
 
-    public void heal(int healHP) {
+    public void heal(double healHP) {
         this.hp = Math.min(this.maxHP, this.hp+healHP);
     }
 
@@ -153,7 +154,12 @@ public class Player {
 
     public void respawn() {
         heal(maxHP);
-        pos = new Vector3D(Math.random() * 30.0 - 10, Math.random() * 30.0 - 10, 0.0);
+        pos = new Vector3D(Math.random() * GameState.GAME_MAP_WIDTH - GameState.GAME_MAP_WIDTH/2, Math.random() * GameState.GAME_MAP_WIDTH - GameState.GAME_MAP_WIDTH/2, 0.0);
+    }
+
+    public boolean isOutField() {
+        return Math.abs(pos.getX()) > GameState.GAME_MAP_WIDTH/2
+                || Math.abs(pos.getY()) > GameState.GAME_MAP_WIDTH/2;
     }
 
 }
