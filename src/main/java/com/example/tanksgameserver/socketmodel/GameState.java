@@ -1,7 +1,7 @@
 package com.example.tanksgameserver.socketmodel;
 
 import com.example.tanksgameserver.socket.GameStateInverseWS;
-import com.example.tanksgameserver.socketmodel.message.PosMessage;
+import com.example.tanksgameserver.socketmodel.message.InputMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.models.TankBodyModel;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
@@ -52,12 +52,12 @@ public class GameState extends Thread {
         return players.remove(playerId);
     }
 
-    public void processPlayerPosMessage(PosMessage posMessage) {
-        String playerId = posMessage.getPlayerId();
+    public void processPlayerPosMessage(InputMessage inputMessage) {
+        String playerId = inputMessage.getPlayerId();
         Player targetPlayer = players.get(playerId);
         if (targetPlayer == null) return;
 
-        HashSet<String> newKeySet = new HashSet<>(Arrays.asList(posMessage.getInput()));
+        HashSet<String> newKeySet = new HashSet<>(Arrays.asList(inputMessage.getInput()));
         targetPlayer.setKeySet(newKeySet);
     }
 

@@ -5,7 +5,7 @@ import com.example.tanksgameserver.socketmodel.GameState;
 import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.message.Message;
-import com.example.tanksgameserver.socketmodel.message.PosMessage;
+import com.example.tanksgameserver.socketmodel.message.InputMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,8 +57,8 @@ public class LobbyService {
 
     public void processPlayerMessage(Message message) {
         GameState gameState = lobbiesMap.get(message.getLobbyId()).getGameState();
-        if (message instanceof PosMessage) {
-            gameState.processPlayerPosMessage((PosMessage) message);
+        if (message instanceof InputMessage) {
+            gameState.processPlayerPosMessage((InputMessage) message);
         } else if (message instanceof TopAngleMessage) {
             gameState.processPlayerTopAngleMessage((TopAngleMessage) message);
         }
