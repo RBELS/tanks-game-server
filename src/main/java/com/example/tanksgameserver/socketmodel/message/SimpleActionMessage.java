@@ -7,7 +7,7 @@ public class SimpleActionMessage extends Message {
     public static final int SHOOT_ACTION_OFF    = -1;
 
     @Getter
-    private final int action;
+    private int action;
 
     public SimpleActionMessage(String lobbyId, String name, int action) {
         super(lobbyId, name);

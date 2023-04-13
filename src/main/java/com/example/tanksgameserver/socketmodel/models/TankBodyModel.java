@@ -49,9 +49,9 @@ public class TankBodyModel {
 
     private boolean pointIsInTriangle(Vector3D point, Vector3D[] triangle) {
         int count = 0;
+        count += intersectsLine(point, triangle[0], triangle[1]);
         count += intersectsLine(point, triangle[1], triangle[2]);
         count += intersectsLine(point, triangle[0], triangle[2]);
-        count += intersectsLine(point, triangle[0], triangle[1]);
         return count % 2 == 1;
     }
 

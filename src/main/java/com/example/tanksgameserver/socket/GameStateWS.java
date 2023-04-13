@@ -4,7 +4,7 @@ import com.example.tanksgameserver.core.LobbyService;
 import com.example.tanksgameserver.socketmodel.GameState;
 import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
-import com.example.tanksgameserver.socketmodel.message.InputMessage;
+import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.SimpleActionMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
@@ -37,9 +37,9 @@ public class GameStateWS {
     private final Logger logger = LoggerFactory.getLogger("Websocket connection");
 
     @MessageMapping("/updatePos")
-    public void updatePos(InputMessage inputMessage) {
-        lobbyService.processPlayerMessage(inputMessage);
-        logger.info(inputMessage.getPlayerId() + "\t" + Arrays.toString(inputMessage.getInput()));
+    public void updatePos(PosMessage posMessage) {
+        lobbyService.processPlayerMessage(posMessage);
+        logger.info(posMessage.getPlayerId() + "\t" + Arrays.toString(posMessage.getInput()));
     }
 
     @MessageMapping("/updateTopAngle")
