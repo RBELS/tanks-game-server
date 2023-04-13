@@ -7,6 +7,11 @@ This is a server side part of the application.
 
 To run the app you need to specify machine ip address in ***AppConfig***
 
+## The server side uses:
+- Spring Boot
+- Spring Messaging for websockets
+- Multithreading to run lobbies' calculations independently
+
 ## About the game
 
 Tanks Game is an IO-like multiplayer browser game.
