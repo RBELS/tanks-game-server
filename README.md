@@ -52,3 +52,19 @@ Current version does not allow you to win. But you can still compete with other 
 ### Home screen form
 
 ![Form image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/form.jpg)
+
+### Online lobbies
+
+![Lobbies image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/lobbies.jpg)
+
+### Game screen
+
+![Game image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/game.jpg)
+
+### Shooting
+
+![Shooting image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/shooting.jpg)
+
+### Dead zone
+
+![Dead zone image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/dead-zone.jpg)
