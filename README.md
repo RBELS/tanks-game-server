@@ -49,4 +49,6 @@ Current version does not allow you to win. But you can still compete with other 
 - If there are click on the chosen lobby
 - If there are not or you want to create a new one, click the "Create lobby" button
 
+### Home screen form
 
+![Form image](https://github.com/RBELS/tanks-game-server/blob/master/display-images/form.jpg)
