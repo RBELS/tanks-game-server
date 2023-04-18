@@ -97,6 +97,7 @@ public class GameStateWS {
                 continue;
             }
 
+            gameState.updateScore(null, 0);
             deletedPlayer = null;
             if (lobby.getPlayersCount() == 0) {
                 lobbyService.removeLobby(lobby.getLobbyId());

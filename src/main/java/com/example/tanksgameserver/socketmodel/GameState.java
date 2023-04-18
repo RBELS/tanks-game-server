@@ -92,7 +92,7 @@ public class GameState extends Thread {
         players.get(playerId).setShooting(on);
     }
 
-    private void updateScore(Player player, int count) {
+    public void updateScore(Player player, int count) {
         if (player != null) {
             player.addScore(count);
         }
