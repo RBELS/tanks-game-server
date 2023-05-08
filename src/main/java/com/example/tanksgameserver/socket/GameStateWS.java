@@ -10,7 +10,6 @@ import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserGameState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,12 +26,15 @@ import java.util.Set;
 @Controller
 public class GameStateWS {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
-    @Autowired
-    private LobbyService lobbyService;
-    @Autowired
-    private GameStateInverseWS gameStateInverseWS;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final LobbyService lobbyService;
+    private final GameStateInverseWS gameStateInverseWS;
+
+    public GameStateWS(SimpMessagingTemplate simpMessagingTemplate, LobbyService lobbyService, GameStateInverseWS gameStateInverseWS) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.lobbyService = lobbyService;
+        this.gameStateInverseWS = gameStateInverseWS;
+    }
 
     private final Logger logger = LoggerFactory.getLogger("Websocket connection");
 

@@ -6,12 +6,10 @@ import lombok.Getter;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class UserGameState {
-    @Getter
     private final double serverTime;
-    @Getter
     private final Map<String, UserPlayerState> players;
-    @Getter
     private final List<UserBulletState> bullets;
 
     public UserGameState(GameState gs) {

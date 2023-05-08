@@ -109,6 +109,9 @@ public class GameState extends Thread {
 
             for (String nickname : players.keySet()) {
                 Player curPlayer = players.get(nickname);
+                if (Objects.isNull(curPlayer)) {
+                    continue;
+                }
                 Vector3D pos = curPlayer.getPos();
                 double rotateAngle = curPlayer.getBodyAngle();
                 tankBodyModel.setModel(pos, rotateAngle);

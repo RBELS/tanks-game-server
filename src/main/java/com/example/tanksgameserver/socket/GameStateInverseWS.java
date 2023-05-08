@@ -14,8 +14,11 @@ public class GameStateInverseWS {
         }
     }
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+    public GameStateInverseWS(SimpMessagingTemplate simpMessagingTemplate) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
+    }
 
     public void sendScoreboardUpdateSignal(String lobbyId) {
         simpMessagingTemplate.convertAndSend("/topic/doUpdate/"+lobbyId, new InverseMessage(ServerSignal.UPDATE_SCOREBOARD.toString()));

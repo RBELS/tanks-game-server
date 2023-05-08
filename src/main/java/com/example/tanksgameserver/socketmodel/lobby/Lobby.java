@@ -1,20 +1,16 @@
 package com.example.tanksgameserver.socketmodel.lobby;
 
 import com.example.tanksgameserver.socketmodel.GameState;
-import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class Lobby {
-    @Getter
     private final GameState gameState;
-    @Getter
     private final String lobbyId;
-    @Getter
     private final String lobbyName;
-    @Getter
     private final String lobbyLeader;
 
     public Lobby(GameState gameState, String lobbyId, String leaderUsername, String lobbyName) {

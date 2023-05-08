@@ -4,15 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.math.geometry.Rotation;
 import org.apache.commons.math.geometry.Vector3D;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.HashSet;
-import java.util.Map;
 
 public class Player {
     public static final double RELOAD_TIME = 1.0;
     public static final double START_HP = 100.0;
-    public static Logger logger = LoggerFactory.getLogger("Player");
     @Getter
     private final String nickname;
     @Getter

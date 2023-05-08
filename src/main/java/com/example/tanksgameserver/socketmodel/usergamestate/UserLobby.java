@@ -3,14 +3,11 @@ package com.example.tanksgameserver.socketmodel.usergamestate;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import lombok.Getter;
 
+@Getter
 public class UserLobby {
-    @Getter
     private final String lobbyId;
-    @Getter
     private final String leader;
-    @Getter
     private final int playersCount;
-    @Getter
     private final String lobbyName;
 
     public UserLobby(Lobby lobby) {

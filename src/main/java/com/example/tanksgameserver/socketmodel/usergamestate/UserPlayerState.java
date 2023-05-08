@@ -6,22 +6,15 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class UserPlayerState {
-    @Getter
     private final double[] pos;
-    @Getter
     private final int moveMultiplier;
-    @Getter
     private final double bodyAngle;
-    @Getter
     private final int bodyRotateMultiplier;
-    @Getter
     private final double topRotateAngle;
-    @Getter
     private final int topRotateMultiplier;
-    @Getter
     private final double hp;
-    @Getter
     private final double maxHp;
 
     public UserPlayerState(Player player) {

@@ -2,23 +2,25 @@ package com.example.tanksgameserver.rest;
 
 import com.example.tanksgameserver.config.AppConfig;
 import com.example.tanksgameserver.core.LobbyService;
-import com.example.tanksgameserver.socketmodel.Player;
 import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserLobby;
 import com.example.tanksgameserver.socketmodel.usergamestate.UserScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin(value = AppConfig.SERVER_ADDRESS, allowCredentials = "true")
 public class GameRestController {
-    @Autowired
-    private LobbyService lobbyService;
+    private final LobbyService lobbyService;
+
+    public GameRestController(LobbyService lobbyService) {
+        this.lobbyService = lobbyService;
+    }
 
     private final Logger logger = LoggerFactory.getLogger("Game Rest Controller");
 
@@ -26,6 +28,9 @@ public class GameRestController {
     private UserLobby createLobby(@RequestBody Map<String, String> bodyParams) {
         String username = bodyParams.get("username");
         String lobbyName = bodyParams.get("lobbyName");
+        if (Objects.isNull(username) || username.isBlank()) {
+            return null;
+        }
 
         Lobby newLobby = lobbyService.createLobby(username, lobbyName);
         logger.info("Lobby " + newLobby.getLobbyId() + " created");

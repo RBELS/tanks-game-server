@@ -7,7 +7,6 @@ import com.example.tanksgameserver.socketmodel.lobby.Lobby;
 import com.example.tanksgameserver.socketmodel.message.Message;
 import com.example.tanksgameserver.socketmodel.message.PosMessage;
 import com.example.tanksgameserver.socketmodel.message.TopAngleMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +19,6 @@ public class LobbyService {
     private final Map<String, Lobby> lobbiesMap;
     private static final int DEFAULT_LOBBY_ID_LEN = 6;
 
-    @Autowired
     public LobbyService(GameStateInverseWS gameStateInverseWS) {
         this.gameStateInverseWS = gameStateInverseWS;
         lobbiesMap = new ConcurrentHashMap<>();
@@ -29,7 +27,7 @@ public class LobbyService {
     public Lobby createLobby(String leaderUsername, String lobbyName) {
         String newLobbyId;
         do {
-            newLobbyId = genLobbyId(DEFAULT_LOBBY_ID_LEN);
+            newLobbyId = genLobbyId();
         } while (lobbiesMap.containsKey(newLobbyId));
 
         Lobby newLobby = new Lobby(new GameState(gameStateInverseWS, newLobbyId), newLobbyId, leaderUsername, lobbyName);
@@ -41,18 +39,14 @@ public class LobbyService {
         lobbiesMap.remove(lobbyId);
     }
 
-    private String genLobbyId(int len) {
+    private String genLobbyId() {
         int range = 'z' - 'a' + 1;
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0;i < len;i++) {
+        for (int i = 0; i < LobbyService.DEFAULT_LOBBY_ID_LEN; i++) {
             int letterOffs = (int) Math.floor(Math.random() * range);
             stringBuilder.append((char) ('a' + letterOffs));
         }
         return stringBuilder.toString();
-    }
-
-    public GameState getGameState(String lobbyId) {
-        return lobbiesMap.get(lobbyId).getGameState();
     }
 
     public void processPlayerMessage(Message message) {
@@ -74,8 +68,7 @@ public class LobbyService {
 
     public boolean usernameExists(String lobbyId, String username) {
         Map<String, Player> playerMap = lobbiesMap.get(lobbyId).getGameState().getPlayers();
-        boolean result = playerMap.values().stream().anyMatch(player -> player.getNickname().equals(username));
-        return result;
+        return playerMap.values().stream().anyMatch(player -> player.getNickname().equals(username));
     }
 
 }
