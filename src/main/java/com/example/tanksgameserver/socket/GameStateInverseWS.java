@@ -1,7 +1,6 @@
 package com.example.tanksgameserver.socket;
 
 import com.example.tanksgameserver.socketmodel.inversemessage.InverseMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
